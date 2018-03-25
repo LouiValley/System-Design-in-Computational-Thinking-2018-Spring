@@ -1,0 +1,10 @@
+CHIP PC {
+IN in[16], inc, load, reset;
+OUT out[16];
+PARTS:
+Register(in=a, load=true, out=out1, out=out);
+Mux16(a=o1, b[0..15]=false, sel=reset, out=a);
+Mux16(a=o2, b=in, sel=load, out=o1);
+Mux16(a=out1, b=o3, sel=inc, out=o2);
+Inc16(in=out1, out=o3);
+}
