@@ -9,3 +9,41 @@
 // program clears the screen, i.e. writes "white" in every pixel.
 
 // Put your code here.
+(START)
+@STATE	//STATE=0
+M=0
+
+@SCREEN
+D=A
+@SCNADDR
+M=D	//SCREEN PTR
+
+@KBD
+D=M
+@BLKINT
+D;JGT	//JUMP TO BLKINT IF KEYBOARD
+@BLK
+0;JMP
+
+(BLKINT)
+@STATE
+M=M-1
+
+(BLK)
+@STATE
+D=M
+
+@SCNADDR 
+A=M
+M=D
+@SCNADDR
+M=M+1
+D=M
+@SCREEN
+D=D-A
+@8191
+D=D-A
+@START
+D;JGT
+@BLK
+0;JMP
