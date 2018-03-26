@@ -1,0 +1,71 @@
+// This file is part of www.nand2tetris.org
+// and the book "The Elements of Computing Systems"
+// by Nisan and Schocken, MIT Press.
+// File name: projects/01/Mux16.hdl
+
+/**
+ * 16-bit multiplexor: 
+ * for i = 0..15 out[i] = a[i] if sel == 0 
+ *                        b[i] if sel == 1
+ */
+
+CHIP Mux16 {
+    IN a[16], b[16], sel;
+    OUT out[16];
+
+    PARTS:
+    Not(in = sel, out = nsel);
+	
+	And(a = nsel, b = a[0], out = aa0);
+	And(a = nsel, b = a[1], out = aa1);
+	And(a = nsel, b = a[2], out = aa2);
+	And(a = nsel, b = a[3], out = aa3);
+	And(a = nsel, b = a[4], out = aa4);
+	And(a = nsel, b = a[5], out = aa5);
+	And(a = nsel, b = a[6], out = aa6);
+	And(a = nsel, b = a[7], out = aa7);
+	And(a = nsel, b = a[8], out = aa8);
+	And(a = nsel, b = a[9], out = aa9);
+	And(a = nsel, b = a[10], out = aa10);
+	And(a = nsel, b = a[11], out = aa11);
+	And(a = nsel, b = a[12], out = aa12);
+	And(a = nsel, b = a[13], out = aa13);
+	And(a = nsel, b = a[14], out = aa14);
+	And(a = nsel, b = a[15], out = aa15);
+	
+	And(a = sel, b = b[0], out = bb0);
+	And(a = sel, b = b[1], out = bb1);
+	And(a = sel, b = b[2], out = bb2);
+	And(a = sel, b = b[3], out = bb3);
+	And(a = sel, b = b[4], out = bb4);
+	And(a = sel, b = b[5], out = bb5);
+	And(a = sel, b = b[6], out = bb6);
+	And(a = sel, b = b[7], out = bb7);
+	And(a = sel, b = b[8], out = bb8);
+	And(a = sel, b = b[9], out = bb9);
+	And(a = sel, b = b[10], out = bb10);
+	And(a = sel, b = b[11], out = bb11);
+	And(a = sel, b = b[12], out = bb12);
+	And(a = sel, b = b[13], out = bb13);
+	And(a = sel, b = b[14], out = bb14);
+	And(a = sel, b = b[15], out = bb15);
+	
+	Or(a = aa0, b = bb0, out = out[0]);
+	Or(a = aa1, b = bb1, out = out[1]);
+	Or(a = aa2, b = bb2, out = out[2]);
+	Or(a = aa3, b = bb3, out = out[3]);
+	Or(a = aa4, b = bb4, out = out[4]);
+	Or(a = aa5, b = bb5, out = out[5]);
+	Or(a = aa6, b = bb6, out = out[6]);
+	Or(a = aa7, b = bb7, out = out[7]);
+	Or(a = aa8, b = bb8, out = out[8]);
+	Or(a = aa9, b = bb9, out = out[9]);
+	Or(a = aa10, b = bb10, out = out[10]);
+	Or(a = aa11, b = bb11, out = out[11]);
+	Or(a = aa12, b = bb12, out = out[12]);
+	Or(a = aa13, b = bb13, out = out[13]);
+	Or(a = aa14, b = bb14, out = out[14]);
+	Or(a = aa15, b = bb15, out = out[15]);
+	
+    // Put your code here:
+}
