@@ -40,15 +40,18 @@ CHIP CPU {
 
     PARTS:
     Mux16(a = ALUoutput, b = instruction, sel = notOp, out = AregIn);
-    ARegister(in = AregIn, load = notOp, out = addressM);
+    ARegister(in = AregIn, load = ARegLoad, out = ARegOut);
+    Mux16(a = ARegOut, b = false, sel = false, out[0..14] = addressM);
 
-    Mux16(a = addressM, b = inM, sel = instruction[12], out = ALUinY);
+    Mux16(a = ARegOut, b = inM, sel = instruction[12], out = ALUinY);
     ALU(x = ALUinX, y = ALUinY, zx = instruction[11], nx = instruction[10], zy = instruction[9], ny = instruction[8],
                                  f = instruction[7], no = instruction[6], out = ALUoutput, zr = zrOut, ng = ngOut);
 
+    Mux16(a = false, b = ALUoutput, sel = instruction[3], out = outM);
 
-    Or(a = instruction[3], b = false, out = writeM);
-    Or(a = instruction[5], b = false, out = notOp);
+    And(a = instruction[15], b = instruction[3], out = writeM);
+    And(a = instruction[15], b = instruction[5], out = ARegLoadC);
+    Or(a = notOp, b = ARegLoadC, out = ARegLoad);
 
 
     Or(a = instruction[2], b = instruction[1], out = j1Orj2);
@@ -75,7 +78,7 @@ CHIP CPU {
     Not(in = instruction[0], out = notj3);
     And(a = j1Andj2, b = notj3, out = jle);
 
-    And(a = instruction[2], b = j2Andj3, out = pcLoad);
+    And(a = instruction[2], b = j2Andj3, out = jmpOr0);
 
     Or(a = zrOut, b = ngOut, out = le); //less than or equal 0
     Not(in = le, out = gt);             //greater than 0
@@ -88,19 +91,29 @@ CHIP CPU {
     Not(in = zrOut, out = notZr);
     And(a = ngOut, b = notZr, out = lt);//less than 0
 
-    And(a = jgt, b = gt, out = pcLoad);
-    And(a = jge, b = ge, out = pcLoad);
-    And(a = jlt, b = lt, out = pcLoad);
-    And(a = jle, b = le, out = pcLoad);
-    And(a = jeq, b = eq, out = pcLoad);
-    And(a = jne, b = ne, out = pcLoad);
+    And(a = jgt, b = gt, out = jmpOr1);
+    And(a = jge, b = ge, out = jmpOr2);
+    And(a = jlt, b = lt, out = jmpOr3);
+    And(a = jle, b = le, out = jmpOr4);
+    And(a = jeq, b = eq, out = jmpOr5);
+    And(a = jne, b = ne, out = jmpOr6);
+
+    Or8Way(in[0] = jmpOr0, in[1] = jmpOr1, in[2] = jmpOr2, in[3] = jmpOr3, in[4] = jmpOr4, in[5] = jmpOr5, in[6] = jmpOr6, out = pcLoad1);
+    //DFF(in = pcLoad1, out = pcLoad);
+
+    And(a = instruction[15], b = pcLoad1, out = pcLoad);
+
+
+    And(a = instruction[15], b = instruction[4], out = DRegLoad);
+    DRegister(in = ALUoutput, load = DRegLoad, out = ALUinX);
+
+    //Or(a = j1Orj2, b = instruction[0], out = pcInc2);
+    Not(in = pcLoad, out = pcInc);
+   // Or(a = pcInc2, b = pcInc1, out = pcInc);
 
 
 
-
-    DRegister(in = ALUoutput, load = instruction[4], out = ALUinX);
-
-    PC(in = addressM, load = pcLoad, reset = reset, out = pc);
+    PC(in = ARegOut, load = pcLoad, inc = pcInc, reset = reset, out[0..14] = pc);
 
     Not(in = instruction[15], out = notOp);
 }
