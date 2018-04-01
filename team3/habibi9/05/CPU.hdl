@@ -44,15 +44,12 @@ CHIP CPU {
 
     Mux16(a = addressM, b = inM, sel = instruction[12], out = ALUinY);
     ALU(x = ALUinX, y = ALUinY, zx = instruction[11], nx = instruction[10], zy = instruction[9], ny = instruction[8],
-                                 f = instruction[7], no = instruction[6], out = ALUoutput, zr = , ng = );
+                                 f = instruction[7], no = instruction[6], out = ALUoutput, zr = zrOut, ng = ngOut);
 
 
     Or(a = instruction[3], b = false, out = writeM);
     Or(a = instruction[5], b = false, out = notOp);
 
-    Or(a = instruction[0], b = instruction[1], out = j2Orj3);
-    Not(in = j2Orj3, out = notj2Orj3);
-    And(a = notj2Orj3, b = instruction[2], out = jlt);
 
     Or(a = instruction[2], b = instruction[1], out = j1Orj2);
     Not(in = j1Orj2, out = notj1Orj2);
@@ -60,12 +57,50 @@ CHIP CPU {
 
     Or(a = instruction[2], b = instruction[0], out = j1Orj3);
     Not(in = j1Orj3, out = notj1Orj3);
+    And(a = instruction[1], b = notj1Orj3, out = jeq);
+
+    Not(in = instruction[2], out = notj1);
+    And(a = instruction[0], b = instruction[1], out = j2Andj3);
+    And(a = j2Andj3, b = notj1, out = jge);
+
+    Or(a = instruction[0], b = instruction[1], out = j2Orj3);
+    Not(in = j2Orj3, out = notj2Orj3);
+    And(a = notj2Orj3, b = instruction[2], out = jlt);
+
+    And(a = instruction[0], b = instruction[2], out = j1Andj3);
+    Not(in = instruction[1], out = notj2);
+    And(a = j1Andj3, b = notj2, out = jne);
+
+    And(a = instruction[1], b= instruction[2], out = j1Andj2);
+    Not(in = instruction[0], out = notj3);
+    And(a = j1Andj2, b = notj3, out = jle);
+
+    And(a = instruction[2], b = j2Andj3, out = pcLoad);
+
+    Or(a = zrOut, b = ngOut, out = le); //less than or equal 0
+    Not(in = le, out = gt);             //greater than 0
+
+    Not(in = ngOut, out = ge);       //greater than or equal 0
+    And(a = zrOut, b = ge, out = eq);//equal 0
+
+    Not(in = eq, out = ne);             //not equal 0
+
+    Not(in = zrOut, out = notZr);
+    And(a = ngOut, b = notZr, out = lt);//less than 0
+
+    And(a = jgt, b = gt, out = pcLoad);
+    And(a = jge, b = ge, out = pcLoad);
+    And(a = jlt, b = lt, out = pcLoad);
+    And(a = jle, b = le, out = pcLoad);
+    And(a = jeq, b = eq, out = pcLoad);
+    And(a = jne, b = ne, out = pcLoad);
+
 
 
 
     DRegister(in = ALUoutput, load = instruction[4], out = ALUinX);
 
-    PC(in = addressM, load = , reset = reset, out = pc);
+    PC(in = addressM, load = pcLoad, reset = reset, out = pc);
 
     Not(in = instruction[15], out = notOp);
 }
