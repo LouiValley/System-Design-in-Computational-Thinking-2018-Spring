@@ -1,0 +1,66 @@
+CHIP CPU {
+
+IN instruction[16], inM[16], reset;
+
+OUT outM[16], addressM[15], writeM, pc[15];
+
+PARTS:
+
+ALU(x=D, y=AorM, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=ALUout, out=outM, zr=zr, ng=ng);
+
+Mux16(a=A, b=inM, sel=instruction[12], out=AorM);
+
+ARegister(in=ALUoutorinA, load=loadA, out=A, out[0..14]=addressM);
+Not(in=instruction[15], out=out1);
+Or(a=out1, b=instruction[5], out=loadA);    //A Register
+
+Mux16(a=ALUout, b=instruction, sel=out1, out=ALUoutorinA);
+
+And(a=instruction[4], b=instruction[15], out=loadD);
+DRegister(in=ALUout, load=loadD, out=D);  //D Register
+
+And(a=instruction[3], b=instruction[15], out=writeM);
+
+PC(in=A, inc=true, load=jumpornot, reset=reset, out[0..14]=pc);   //Program counter(with jump to be finished)
+
+Or8Way(in[0]=false, in[1]=JGT, in[2]=JEQ, in[3]=JGE, in[4]=JLT, in[5]=JNE, in[6]=JLE, in[7]=JMP, out=var1);
+And(a=var1, b=instruction[15], out=jumpornot);
+
+Not(in=ng, out=notng);
+Not(in=zr, out=notzr);
+And(a=notng, b=notzr, out=positive);
+Not(in=positive, out=npositive);
+Not(in=instruction[0], out=n0);
+Not(in=instruction[1], out=n1);
+Not(in=instruction[2], out=n2);
+
+And(a=n2, b=n1, out=p1);
+And(a=instruction[0], b=positive, out=q1);
+And(a=p1, b=q1, out=JGT);
+
+And(a=n2, b=instruction[1], out=p2);
+And(a=n0, b=zr, out=q2);
+And(a=p2, b=q2, out=JEQ);
+
+And(a=n2, b=instruction[1], out=p3);
+And(a=instruction[0], b=notng, out=q3);
+And(a=p3, b=q3, out=JGE);
+
+And(a=instruction[2], b=n1, out=p4);
+And(a=n0, b=ng, out=q4);
+And(a=p4, b=q4, out=JLT);
+
+And(a=instruction[2], b=n1, out=p5);
+And(a=instruction[0], b=notzr, out=q5);
+And(a=p5, b=q5, out=JNE);
+
+And(a=instruction[2], b=instruction[1], out=p6);
+And(a=n0, b=npositive, out=q6);
+And(a=p6, b=q6, out=JLE);
+
+And(a=instruction[2], b=instruction[1], out=q);
+And(a=q, b=instruction[0], out=JMP);
+}
+
+
+
