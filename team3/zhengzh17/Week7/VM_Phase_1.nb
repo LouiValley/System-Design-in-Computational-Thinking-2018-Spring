@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     11305,        280]
-NotebookOptionsPosition[     10487,        255]
-NotebookOutlinePosition[     10842,        271]
-CellTagsIndexPosition[     10799,        268]
+NotebookDataLength[     11408,        282]
+NotebookOptionsPosition[     10589,        257]
+NotebookOutlinePosition[     10944,        273]
+CellTagsIndexPosition[     10901,        270]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -227,15 +227,17 @@ Cell[BoxData[
    RowBox[{"Prepend", "[", 
     RowBox[{"x", ",", 
      RowBox[{"{", 
-      RowBox[{"\"\<@SP\>\"", ",", "\"\<M=256\>\""}], "}"}]}], "]"}]}], 
+      RowBox[{
+      "\"\<@256\>\"", ",", "\"\<D=A\>\"", ",", "\"\<@SP\>\"", ",", 
+       "\"\<M=D\>\""}], "}"}]}], "]"}]}], 
   RowBox[{"(*", 
    RowBox[{
    "this", " ", "is", " ", "to", " ", "add", " ", "the", " ", "starting", " ",
      "value", " ", "of", " ", "SP"}], "*)"}], "\[IndentingNewLine]", 
   "\[IndentingNewLine]"}]], "Input",
  CellChangeTimes->{{3.732890057239453*^9, 3.7328900588502455`*^9}, {
-  3.732890130531621*^9, 
-  3.7328901455427933`*^9}},ExpressionUUID->"48c1e5bd-04e6-4c7a-bdfe-\
+  3.732890130531621*^9, 3.7328901455427933`*^9}, {3.732891563991534*^9, 
+  3.7328915788287373`*^9}},ExpressionUUID->"48c1e5bd-04e6-4c7a-bdfe-\
 0e1b9e1cc9d8"],
 
 Cell[BoxData[
@@ -278,9 +280,9 @@ Cell[1199, 42, 868, 24, 106, "Input", "ExpressionUUID" -> \
 "491d16ee-ed54-4dd5-83eb-789cd6666162"],
 Cell[2070, 68, 7265, 152, 836, "Input", "ExpressionUUID" -> \
 "301527d3-37fc-485f-a749-014de5b3ab0f"],
-Cell[9338, 222, 615, 16, 106, "Input", "ExpressionUUID" -> \
+Cell[9338, 222, 717, 18, 106, "Input", "ExpressionUUID" -> \
 "48c1e5bd-04e6-4c7a-bdfe-0e1b9e1cc9d8"],
-Cell[9956, 240, 527, 13, 68, "Input", "ExpressionUUID" -> \
+Cell[10058, 242, 527, 13, 68, "Input", "ExpressionUUID" -> \
 "d46eaac1-d57c-4c86-87da-1de079497894"]
 }
 ]
