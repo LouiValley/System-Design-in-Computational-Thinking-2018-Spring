@@ -1,0 +1,17 @@
+@SP
+AM=M-1
+D=M
+A=A-1
+A=M
+D=A-D
+@if_true_^?$
+^#$
+D=0
+@store_^?$
+0;JMP
+(if_true_^?$)
+D=-1
+(store_^?$)
+@SP
+A=M-1
+M=D

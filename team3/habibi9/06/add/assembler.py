@@ -68,6 +68,66 @@ def determine_jump(str):
 		else:
 			return ''
 
+def determine_symbol(str):
+	if determine_command_type(str) == 'A_COMMAND':
+		return str[1:]
+	if determine_command_type(str) == 'L_COMMAND':
+		return str[1:-1]
+
+
+def dest_code(inst):
+	if inst == '': return '000'
+	if inst == 'M': return '001'
+	if inst == 'D': return '010'
+	if inst == 'MD': return '011'
+	if inst == 'A': return '100'
+	if inst == 'AM': return '101'
+	if inst == 'AD': return '110'
+	if inst == 'AMD': return '111'
+
+def comp_code(self,inst):
+	if inst == '0': return '0101010'
+	if inst == '1': return '0111111'
+	if inst == '-1': return '0111010'
+	if inst == 'D': return '0001100'
+	if inst == 'A': return '0110000'
+	if inst == '!D': return '0001101'
+	if inst == '!A': return '0110001'
+	if inst == '-D': return '0001111'
+	if inst == '-A': return '0110011'
+	if inst == 'D+1': return '0011111'
+	if inst == 'A+1': return '0110111'
+	if inst == 'D-1': return '0001110'
+	if inst == 'A-1': return '0110010'
+	if inst == 'D+A': return '0000010'
+	if inst == 'D-A': return '0010011'
+	if inst == 'A-D': return '0000111'
+	if inst == 'D&A': return '0000000'
+	if inst == 'D|A': return '0010101'
+	if inst == 'M': return '1110000'
+	if inst == '!M': return '1110001'
+	if inst == '-M': return '1110011'
+	if inst == 'M+1': return '1110111'
+	if inst == 'M-1': return '1110010'
+	if inst == 'D+M': return '1000010'
+	if inst == 'D-M': return '1010011'
+	if inst == 'M-D': return '1000111'
+	if inst == 'D&M': return '1000000'
+	if inst == 'D|M': return '1010101'
+
+def jump_code(self,inst):
+	if inst == '': return '000'
+	if inst == 'JGT': return '001'
+	if inst == 'JEQ': return '010'
+	if inst == 'JGE': return '011'
+	if inst == 'JLT': return '100'
+	if inst == 'JNE': return '101'
+	if inst == 'JLE': return '110'
+	if inst == 'JMP': return '111'
+
+
+location_list = []
+
 
 a = in_file.readline()
 while a:
