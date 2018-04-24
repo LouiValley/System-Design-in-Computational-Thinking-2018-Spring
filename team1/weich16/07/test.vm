@@ -1,0 +1,22 @@
+function mult 2
+push constant 0
+pop local 0
+push argument 1
+pop local 1
+label loop
+push constant 0
+push loacal 1
+eq
+if-goto end
+push loacl 0
+push argument 0
+add
+pop local 0
+push local 1
+push constant 1
+sub
+pop local 1
+goto loop
+label end
+push local 0
+return
