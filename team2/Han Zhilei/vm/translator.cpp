@@ -2,10 +2,12 @@
     this is the vitual machine language translator for the implement of Hack Computer
     Arthor:HZL
 */
+#include <stdlib.h>
 #include <iostream>
 #include <cstring>
 #include <string>
 
+#define FILENAME "main.asm"
 //#define SP 0
 //#define LCL 1
 //#define ARG 2
@@ -47,13 +49,13 @@ class Parser
         char buffer[2048];
         char arg1[100],arg2[100],command[100];
         char commentpart[100],commandpart[100];
-        bool endoffile=false;
+        //bool endoffile=false;
     public:
         //friend std::istream& operator>>(std::istream& in,Parser& dst);
         Parser(char* path);
         bool eof();
         void advance();
-        void getc();
+        //void getc();
         enum commandtype ctype();
         std::string getcommand();
         std::string getarg1();
@@ -71,10 +73,10 @@ bool Parser::eof()
     return feof(target);
 }
 
-void Parser::getc()
-{
-    fgetc(target);
-}
+//void Parser::getc()
+//{
+    //fgetc(target);
+//}
 
 void Parser::advance()
 {
@@ -103,7 +105,7 @@ bool checkarithemetic(char* command)
 
 commandtype Parser::ctype()
 {
-    if(strcmp(commandpart,"")==0)
+    if(strcmp(command,"")==0)
     {
         return C_IGNORE;
     }
@@ -121,9 +123,33 @@ commandtype Parser::ctype()
         {
             return C_POP;
         }
-        //TODO
-        //more check and type
+        if(strcmp(command,"label")==0)
+        {
+            return C_LABEL;
+        }
+        if(strcmp(command,"goto")==0)
+        {
+            return C_GOTO;
+        }
+        if(strcmp(command,"if-goto")==0)
+        {
+            return C_IF;
+        }
+        if(strcmp(command,"function")==0)
+        {
+            return C_FUNCTION;
+        }
+        if(strcmp(command,"call")==0)
+        {
+            return C_CALL;
+        }
+        if(strcmp(command,"return")==0)
+        {
+            return C_RETURN;
+        }
     }
+        printf("error:wrong command %s\n",command);
+        exit(1);
 }
 
 std::string Parser::getcommand()
@@ -158,22 +184,40 @@ class Interpretor
 {
     private:
         FILE* target;
-        char tpath[200];
+        std::string currentfile;
+        std::string currentfunction;
     public:
-    void settarget( char* path);
-    void write(struct parsedcommand);
-    void writearithmetic(struct parsedcommand);
-    void writepush(struct parsedcommand);
-    void writepop(struct parsedcommand);
+        void settarget(std::string path);
+        void setfunction(std::string targetfunction);
+        void setcurrentfile(char* path);
+        void write(struct parsedcommand);
+        void writeinit();
+        void writearithmetic(struct parsedcommand);
+        void writepush(struct parsedcommand);
+        void writepop(struct parsedcommand);
+        void writelabel(struct parsedcommand);
+        void writegoto(struct parsedcommand);
+        void writeifgoto(struct parsedcommand);
+        void writefunction(struct parsedcommand);
+        void writecall(struct parsedcommand);
+        void writereturn(struct parsedcommand);
 };
 
-void Interpretor::settarget( char* path)
+void Interpretor::settarget(std::string path)
 {
     if(target)
         fclose(target);
-    strcpy(tpath,path);
-    strcat(path,".asm");
-    target=fopen(path,"w");
+    target=fopen(path.c_str(),"w");
+}
+
+void Interpretor::setcurrentfile(char* path)
+{
+    currentfile=path;
+}
+
+void Interpretor::setfunction(std::string targetfunction)
+{
+    currentfunction=targetfunction;
 }
 
 void Interpretor::write(struct parsedcommand command)
@@ -196,6 +240,42 @@ void Interpretor::write(struct parsedcommand command)
         {
             fprintf(target,"//C_POP %s %s %s\n",command.command.c_str(),command.arg1.c_str(),command.arg2.c_str());
             writepop(command);
+            break;
+        }
+        case C_LABEL:
+        {
+            fprintf(target,"//C_LABEL %s %s\n",command.command.c_str(),command.arg1.c_str());
+            writelabel(command);
+            break;
+        }
+        case C_GOTO:
+        {
+            fprintf(target,"//C_GOTO %s %s\n",command.command.c_str(),command.arg1.c_str());
+            writegoto(command);
+            break;
+        }
+        case C_IF:
+        {
+            fprintf(target,"//C_IF %s %s\n",command.command.c_str(),command.arg1.c_str());
+            writeifgoto(command);
+            break;
+        }
+        case C_CALL:
+        {
+            fprintf(target,"//C_CALL %s %s\n",command.command.c_str(),command.arg1.c_str());
+            writecall(command);
+            break;
+        }
+        case C_FUNCTION:
+        {
+            fprintf(target,"//C_FUNCTION %s %s\n",command.command.c_str(),command.arg1.c_str());
+            writefunction(command);
+            break;
+        }
+        case C_RETURN:
+        {
+            fprintf(target,"//C_RETURN %s %s\n",command.command.c_str(),command.arg1.c_str());
+            writereturn(command);
             break;
         }
         default:
@@ -630,7 +710,7 @@ void Interpretor::writepush(struct parsedcommand command)
         fprintf(target,"@13\n");
         fprintf(target,"M=D\n");
 
-        fprintf(target,"@%s.%s\n",tpath,command.arg2.c_str());
+        fprintf(target,"@%s.%s\n",currentfile.c_str(),command.arg2.c_str());
         fprintf(target,"D=M\n");
 
         fprintf(target,"@13\n");
@@ -793,7 +873,7 @@ void Interpretor::writepop(struct parsedcommand command)
         fprintf(target,"A=A-1\n");
         fprintf(target,"D=M\n");
 
-        fprintf(target,"@%s.%s\n",tpath,command.arg2.c_str());
+        fprintf(target,"@%s.%s\n",currentfile.c_str(),command.arg2.c_str());
         fprintf(target,"M=D\n");
 
         fprintf(target,"@SP\n");
@@ -801,10 +881,214 @@ void Interpretor::writepop(struct parsedcommand command)
     }
 }
 
+void Interpretor::writelabel(struct parsedcommand command)
+{
+    fprintf(target,"(%s$%s)\n",currentfunction.c_str(),command.arg1.c_str());
+}
+
+void Interpretor::writegoto(struct parsedcommand command)
+{
+    fprintf(target,"@%s$%s\n",currentfunction.c_str(),command.arg1.c_str());
+    fprintf(target,"0;JMP\n");
+}
+
+void Interpretor::writeifgoto(struct parsedcommand command)
+{
+    fprintf(target,"@SP\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@256\n");
+    fprintf(target,"A=A+D\n");
+    fprintf(target,"A=A-1\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@%s$%s\n",currentfunction.c_str(),command.arg1.c_str());
+    fprintf(target,"D;JNE\n");
+}
+
+void Interpretor::writefunction(struct parsedcommand command)
+{
+    int local_number=std::stoi(command.arg2);
+    fprintf(target,"(%s)\n",command.arg1.c_str());
+    for(int i=0;i<local_number;i++)
+    {
+        writepush({C_PUSH,"push","constant","0"});
+    }
+}
+
+void Interpretor::writecall(struct parsedcommand command)
+{
+    currentfunction=command.arg1;
+    //push return addr,manually
+    fprintf(target,"@SP\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@256\n");
+    fprintf(target,"D=A+D\n");
+    fprintf(target,"@13\n");
+    fprintf(target,"M=D\n");
+    fprintf(target,"@%s&returnaddr\n",command.arg1.c_str());
+    fprintf(target,"D=A\n");
+    fprintf(target,"@13\n");
+    fprintf(target,"A=M\n");
+    fprintf(target,"M=D\n");
+    fprintf(target,"@SP\n");
+    fprintf(target,"M=M+1\n");
+    //push LCL value
+    fprintf(target,"D=M\n");
+    fprintf(target,"@256\n");
+    fprintf(target,"D=A+D\n");
+    fprintf(target,"@13\n");
+    fprintf(target,"M=D\n");
+    fprintf(target,"@LCL\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@13\n");
+    fprintf(target,"A=M\n");
+    fprintf(target,"M=D\n");
+    fprintf(target,"@SP\n");
+    fprintf(target,"M=M+1\n");
+    //push ARG
+    fprintf(target,"D=M\n");
+    fprintf(target,"@256\n");
+    fprintf(target,"D=A+D\n");
+    fprintf(target,"@13\n");
+    fprintf(target,"M=D\n");
+    fprintf(target,"@ARG\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@13\n");
+    fprintf(target,"A=M\n");
+    fprintf(target,"M=D\n");
+    fprintf(target,"@SP\n");
+    fprintf(target,"M=M+1\n");
+    //THIS
+    fprintf(target,"D=M\n");
+    fprintf(target,"@256\n");
+    fprintf(target,"D=A+D\n");
+    fprintf(target,"@13\n");
+    fprintf(target,"M=D\n");
+    fprintf(target,"@THIS\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@13\n");
+    fprintf(target,"A=M\n");
+    fprintf(target,"M=D\n");
+    fprintf(target,"@SP\n");
+    fprintf(target,"M=M+1\n");
+    //THAT
+    fprintf(target,"D=M\n");
+    fprintf(target,"@256\n");
+    fprintf(target,"D=A+D\n");
+    fprintf(target,"@13\n");
+    fprintf(target,"M=D\n");
+    fprintf(target,"@THAT\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@13\n");
+    fprintf(target,"A=M\n");
+    fprintf(target,"M=D\n");
+    fprintf(target,"@SP\n");
+    fprintf(target,"M=M+1\n");
+
+    fprintf(target,"D=M\n");
+    fprintf(target,"@256\n");
+    fprintf(target,"D=A+D\n");
+    fprintf(target,"@LCL\n");
+    fprintf(target,"M=D\n");
+
+    fprintf(target,"@%d\n",std::stoi(command.arg2));
+    fprintf(target,"D=D-A\n");
+    fprintf(target,"@5\n");
+    fprintf(target,"D=D-A\n");
+    fprintf(target,"@ARG\n");
+    fprintf(target,"M=D\n");
+
+    fprintf(target,"@%s\n",command.arg1.c_str());
+    fprintf(target,"0;JMP\n");
+
+    fprintf(target,"(%s&returnaddr)\n",command.arg1.c_str());
+}
+
+void Interpretor::writereturn(struct parsedcommand command)
+{
+    //frame<=LCL
+    fprintf(target,"@LCL\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@14\n");
+    fprintf(target,"M=D\n");
+
+    //return type put in arg 0
+    writepop({C_POP,"pop","argument","0"});
+
+    //SP+256<=ARG+1
+    fprintf(target,"@ARG\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"D=D+1\n");
+    fprintf(target,"@256\n");
+    fprintf(target,"D=D-A\n");
+    fprintf(target,"@SP\n");
+    fprintf(target,"M=D\n");
+
+    //THAT=frame-1
+    fprintf(target,"@14\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"D=D-1\n");
+    fprintf(target,"A=D\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@THAT\n");
+    fprintf(target,"M=D\n");
+
+    fprintf(target,"@14\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@2\n");
+    fprintf(target,"D=D-A\n");
+    fprintf(target,"A=D\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@THIS\n");
+    fprintf(target,"M=D\n");
+
+    fprintf(target,"@14\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@3\n");
+    fprintf(target,"D=D-A\n");
+    fprintf(target,"A=D\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@ARG\n");
+    fprintf(target,"M=D\n");
+
+    fprintf(target,"@14\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@4\n");
+    fprintf(target,"D=D-A\n");
+    fprintf(target,"A=D\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@LCL\n");
+    fprintf(target,"M=D\n");
+
+    fprintf(target,"@14\n");
+    fprintf(target,"D=M\n");
+    fprintf(target,"@5\n");
+    fprintf(target,"D=D-A\n");
+    fprintf(target,"A=D\n");
+    fprintf(target,"A=M\n");
+    fprintf(target,"0;JMP\n");
+}
+
+void Interpretor::writeinit()
+{
+    fprintf(target,"@SP\n");
+    fprintf(target,"M=0\n");
+    struct parsedcommand tmp;
+    tmp.ctype=C_CALL;
+    tmp.command="call";
+    tmp.arg1="Sys.init";
+    tmp.arg2="0";
+    writecall(tmp);
+}
+
 int main(int argc,char* argv[])
 {
+    //TODO
+    //the interpretor should only produce one asm file
+    //DONE
     Interpretor* interpretor=new Interpretor;
     Parser** parser=new Parser*[argc-1];
+    interpretor->settarget(FILENAME);
+    interpretor->writeinit();
     char buffer[200];
     for(int i=0;i<argc-1;i++)
     {
@@ -812,7 +1096,7 @@ int main(int argc,char* argv[])
         {
             parser[i]=new Parser(argv[i+1]);
             sscanf(argv[i+1],"%[^.].vm",buffer);
-            interpretor->settarget(buffer);
+            interpretor->setcurrentfile(buffer);
             while(!parser[i]->eof())
             {
                 parser[i]->advance();
