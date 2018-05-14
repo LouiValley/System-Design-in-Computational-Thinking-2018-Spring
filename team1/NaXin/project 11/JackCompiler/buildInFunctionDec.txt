@@ -1,0 +1,64 @@
+Math
+function void init()
+function int abs(int x)
+function int multiply(int x, int y)
+function int divide(int x, int y)
+function int min(int x, int y)
+function int max(int x, int y)
+function int sqrt(int x)
+
+String
+constructor String new(int maxLength)
+method int dispose()
+method int length()
+method char charAt(int j)
+method void setCharAt(int j, char c)
+method String appendChar(char c)
+method void eraseLastChar()
+method int intValue()
+method void setInt(int val)
+function char backSpace()
+function char doubleQuote()
+function char newLine()
+
+Array
+function Array new(int size)
+method void dispose()
+
+Output
+function void init()
+function void moveCursor(int i, int j)
+function void printChar(char c)
+function void printString(String s)
+function void printInt(int i)
+function void println()
+function void backSpace()
+
+Screen
+function void init()
+function void clearScreen()
+function void setColor(boolean b)
+function void drawPixel(int x, int y)
+function void drawLine(int x1, int y1, int x2, int y2)
+function void drawRectangle(int x1, int y1, int x2, int y2)
+function void drawCircle(int x, int y, int r)
+
+Keyboard
+function void init()
+function char keyPressed()
+function char readChar()
+function String readLine(String message)
+function int readInt(String message)
+
+Memory
+function void init()
+function int peek(int address)
+function void poke(int address, int value)
+function Array alloc(int size)
+function void deAlloc(Array o)
+
+Sys
+function void init()
+function void halt()
+function void error(int errorCode)
+function void wait(int duration)
