@@ -2,7 +2,7 @@
 
 The final test runs the pong game. Using the .jack file have been writen.
 
-## in the pong folder
+## in the Pong folder
 you will see the .vm files for pong
 
 ## issue
