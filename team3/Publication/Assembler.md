@@ -2,7 +2,7 @@
 
 # Assembler
 
-## Into
+## Intro
 
 Congratulations! We really appreciate your comprehension which enables you to implement PC and learn that complicated hack machine language.  However, one must be aware of the fact that we create machine language because our PC is, at this moment, foolish and cannot comprehend our thoughts.
 
