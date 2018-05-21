@@ -16,7 +16,7 @@ That's why in this chapter we will ***focus*** on ***how a machine can learn***,
 
 To answer this question we must first try to figure out the answer to the other one. That is: **"How can we learn?"**
 
-Unfortunately we are not able to give you a perfect answer because of the complicated mechanism of learning inside our brain. But it's okey for us to suppose that when you learn something, there must be a  **physical evidence** in your organism. For us, it might be a curve in our brain; for machine, it can be a new chip added or a new function implemented.
+Unfortunately we are not able to give you a perfect answer because of the complicated mechanism of learning inside our brain. But it's okay for us to suppose that when you learn something, there must be a  **physical evidence** in your organism. For us, it might be a curve in our brain; for machine, it can be a new chip added or a new function implemented.
 
 ~~***(One critical advantage we have over machine now is that this physcial improvement can be made by ourselves. A machine cannot optimize its hardware by itself, at least for now(。・・)ノ.)***~~
 
