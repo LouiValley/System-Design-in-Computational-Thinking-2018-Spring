@@ -32,12 +32,12 @@
 
 ## Course
 
-This book is designed for and based on the course ***Computational thinking and system design***. One can gain critical knowledge not only for computer structure from hardware to software, but for the  thinking and self-optimizing methods as well. Readers are required to have basic reading and calculating ability, and know at least one programming language(not really necessary).
+This book is designed for and based on the course ***Computational thinking and system design***. One can gain critical knowledge not only for computer structure from hardware to software, but for the thinking and self-optimizing methods as well. Readers are required to have basic reading and calculating ability, and know at least one programming language (not really necessary).
 
 ## Structure
 
-This book is divided into three separated chapters: **Hardware**, **Language and Software**, and **Translators**. The recommanded sequence is not necesssary while you are learning.
+This book is divided into three separated chapters: **Hardware**, **Language and Software**, and **Translators**. The recommended sequence is not necessary while you are learning.
 
-For every chapter and every section of a chapter we provided a logic model, to summarize the learning process and help you figure out the complete learn-and-know procedure. Remember, our logic model is only a guidance. Your own logic model chould be quite different, and we are expecting that.
+For every chapter and every section of a chapter we provided a logic model, to summarize the learning process and help you figure out the complete learn-and-know procedure. Remember, our logic model is only a guidance. Your own logic model could be quite different, and we are expecting that.
 
-Building a modern computer from the very beginning is a huge and complicated project. One should be aware of which stage he is at in the procedure, and why is that necessary. To help the readers concentrate on each stage and  summarize what they've learnt in the correct way, a logic model is needed.
+Building a modern computer from the very beginning is a huge and complicated project. One should be aware of which stage he is at in the procedure, and why is that necessary. To help the readers concentrate on each stage and summarize what they've learnt in the correct way, a logic model is needed.
