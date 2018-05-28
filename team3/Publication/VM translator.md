@@ -12,4 +12,6 @@ As you should know by now, assembly is very hard for (most) humans to understand
 
 Translating from Jack to assembly also presents another challenge: the resulting assembly will work for the computer we built, but what about another computer, with a different kind of assembly? We would have to go through the process of writing the translator all over again! Surely this is a tedious and nearly impossible task. 
 
-Since the 
+Since the root of all these diffculties is the disparities between Jack and assembly, why don't we find a way to bridge that gap? If we can create a language that is both "low" enough to translate into machine code easily, and yet "high" enough so that Jack can easily translate into it, it would make our lives (as compiler designers) a lot easier. And the added benefit we get is that if we should wish to compile Jack for any other machine, we can leave the part that deals with Jack alone, and only rewrite the part that deals with the assembly. We cal; this "in-between language" VM (virtual machine) language, and soon enough, this funny name will make sense to you. 
+
+Now, this 
