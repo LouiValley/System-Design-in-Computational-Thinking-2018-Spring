@@ -8,3 +8,8 @@ If you are reading this chapter, you will probably have finished creating an ass
 
 ##Two tier compilation: bridging the gap
 
+As you should know by now, assembly is very hard for (most) humans to understand, but as far as the computer is concerned, it doesn't get much more simple than this. At the other end of the spectrum, there's our high level language called Jack (which we will study in detail in the chapters to come), which is quite easy for us to understand, but in order for it to be meaningful, we have to translate it into assembly code. We've already done translation once, and that wasn't too easy a task (at least not for us!), and that was from assembly to machine code, two very similar languages. Imagine the challenge of having to translate between two languages entirely different in complexity, dimention and syntax! Indeed such a task is very difficult. 
+
+Translating from Jack to assembly also presents another challenge: the resulting assembly will work for the computer we built, but what about another computer, with a different kind of assembly? We would have to go through the process of writing the translator all over again! Surely this is a tedious and nearly impossible task. 
+
+Since the 
