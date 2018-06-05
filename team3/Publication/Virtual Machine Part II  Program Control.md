@@ -30,9 +30,41 @@ This time, we will eventually possess a more powerful language, which enables yo
 
 ***Always remember, the more mind effort you make when designing and manufacturing your tools, the easier the following job will be.***
 
+We would like you to build this amazing function in two steps. First, finish the program flow command, that is,the basic loop statement. And then we go on dealing with the function calling protocol.
+
+## Program flow command
+
+We are no strangers to this part. Last time we implemented the if-goto statement by using two lines like:
+
+* @xxx
+* D;JGT
+
+This time we want to simplify them so that we can write codes easier.
+
+There are three types of program flow commands:
+
+* **label  declaration** Label declaration is quite the same as "(LOOP)". We use the pattern "label ***label***" to point at the address of the following line. ***label*** can be any string consisting of numbers, letters, underlines(_), dots(.) and colons(:), and start with non-numbers.
+* **goto statement** Goto statement follows the pattern "goto ***label***". It is a unconditional jump to where the ***label*** is pointing at.
+* **if-goto statement** This is a conditional jump. First, pop the boolean value from the top of the stack. If it is true, jump to the line which "***label***" is pointing at. Otherwise continue the following lines.
+
+### Some suggestions
+
+1. Whenever you write a program flow command, make sure that the "***label***" is pointing at a line **inside this program**. 
+2. Since the subroutines we write may contain same labels, we decided that every ***label***  created in the VM language should gain the counterpart ***functionname$label*** in the assembly.
 
 
-## What have we already known?
+
+Quite easy, isn't it? Now you can go to our **project instructions** to start part I. Enjoy!
+
+
+
+
+
+
+
+## Function Calling Protocol
+
+### Background
 
 Let us suppose that you are solving a math problem. At one certain step you suddenly realize that a theorem in one of your textbooks can be applied to this part. You go to your study and find that book, find the page that introduce the theorem, use it, memorize the answer, and then come back to your problem to continue.
 
@@ -60,7 +92,9 @@ The trick is, whenever we want to call a function, say "Multiply" (whose name wa
 
 ##### Function Call
 
-1. Push all the arguments that function needs into the stack;
+(VM code: ***call f n*** )(Note: "***f***" is the function's name and n is the number of the arguments it needs.)
+
+1. Push all the arguments that function needs into the stack.
 
 2. Mark where we stop so that when the subroutine is over, we will know where to go to. Use the VM code   
 
@@ -92,10 +126,70 @@ And then your subroutine, in this case "multiply", will run successfully in our 
 
 ##### Return
 
+(VM code: ***return***)
 
+1. Store the pointer LCL in a temporary variable **FRAME**:
+   * FRAME = LCL
+2. Store your return address in a temporary variable **RET**:
+   * RET = *(FRAME-5)
+3. A VM subroutine always return a value, now you need to pop it out, so:
+   * *ARG = pop()
+4. Reset all the pointers:
+   * SP = ARG+1
+   * THAT = *(FRAME-1)
+   * THIS = *(FRAME-2)
+   * ARG = *(FRAME-3)
+   * LCL = *(FRAME-4)
+5. Go to return address:
+   * goto RET
+
+Now all we lack is to declare a function.
 
 ##### Function Declare
 
+(VM code: ***function f k*** )(Note: "***k***" is the number of ***f***'s local variables)
+
+1. Generate a label for your function.
+   * (f)
+2. Repeat the following code **k** times to initialize the "local" section:
+   * push constant 0
+
+**Warnings:**
+
+1. All the VM (pseudo) codes above should be inplemented in assembly.
+2. *ARG represents the value stored in ARG.
+3. The caller must push necessary arguments, and wait for the callee to return, but this won't be your concern. We hope this will help you understand why there must be a ARG = pop() in the implementation of ***return***.
+4. Be careful with your RET's address.
 
 
- 
+
+
+
+## Project Instructions
+
+~~***(Feel free to ignore this part if you are confident in yourself when building your translator.)***~~
+
+~~***(ALSO feel free to come back when you find it difficult.)***~~
+
+
+
+#### Before we start
+
+In order to make sure you've understand the new VM codes, we suggest you write the following program on your own.
+
+Exercise VM-1 
+
+Write the following programs in VM language. Use the given VM translator to get your assembly and run them in the CPUEmulator to test your codes.
+
+* 1) Mult.vm, the multiply subroutine.
+
+  This subroutine should be declared as ***function mult 2***
+
+  This function can multiply the two arguments on the top of the stack and leave the result there.
+
+* 2) Factorial9.vm, the factorial main function.
+
+  This program should be designed to get the value of 9! and store it into static.5
+
+
+
