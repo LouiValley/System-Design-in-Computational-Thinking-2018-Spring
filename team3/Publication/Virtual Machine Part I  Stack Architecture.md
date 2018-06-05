@@ -35,6 +35,16 @@ Imagine a very tall stack of books, only the book on the very top is exposed to 
 
 All the other stack operations are based around push and pop: when adding two numbers, we first pop the two topmost numbers from the stack, calculated the sum and push it back into the stack
 
+### Stack arithmetic
+
+Our virtual machine language comes with a set of arithmetic operators:
+*add, sub    	*//addition and subtraction*
+*neg 		    *//negation*
+*eq, gt, lt     *//compare the size of two numbers*
+*and, or, not   *//boolean operators*
+
+When these operators are executed, they pop one or two numbers from the stack, perform the calculation, then push the result back into the stack.
+
 
 
 
