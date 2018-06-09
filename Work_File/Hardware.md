@@ -299,11 +299,11 @@ ___
 In the previous chapters, we have learned about combinational logic and sequential logic. So, how can we use these discrete parts of knowledge to build a powerful computer?
 
 Secrets hide in the way we "compute". Whenever we want to solve a problem, we always need a pattern to follow. If not, we have to find one. To solve similar problems at any time, we memorize the exact steps. In computers it is quite the same. Those "steps" become a category of instructions and are stored in the computer's "Instruction Memory". After that, when we want to calculate something, we always need a place to do it and note down the intermediate values. That place is called the "Data Memory". Also we need our brain, whose counterpart in computer is the CPU, and a reminder of what to do next, which is the Program Counter.
- 
+
 All these units form our ideal computer structure, and each one of them can be implemented by our logic gates. As you can see in our "Additional thoughts", our hack computer inherits the features of this structure, both advantages and disadvantages. **This structure is "one of" the computer architectures.**
- 
+
 The first documented computer architecture was in the correspondence between Charles Babbage and Ada Lovelace, describing the analytical engine. And in mordern computer science, the most well-known architecture is **Von Neumann architecture**, which is exactly what we are going to build in this chapter.
- 
+
 After that, the hardware of our Hack computer is done and we are going to software part. So in some way, the computer architecture is also a bridge between hardware and software. The upper level software will finally use the machine language instructions to coordinate the machine, and this process is just determined by the computer architecture.
 
 Besides Von Neumann architecture, of course there are other computer architectures. **What are the connections among them?** And **what are the differences?** These questions are also what we are going to discuss.
@@ -317,9 +317,9 @@ It is quite clear that we must build our computer in Von Neumann architecture. B
 In other words, **what are the characteristics of Von Neumann architecture?**
 
 >The von Neumann architecture, which is also known as the von Neumann model and Princeton architecture, is a computer architecture based on the 1945 description by the mathematician and physicist John von Neumann and others in the First Draft of a Report on the EDVAC.
-This describes a design architecture for an electronic digital computer with parts consisting of a processing unit containing an arithmetic logic unit and processor registers; a control unit containing an instruction register and program counter; a memory to store both data and instructions; external mass storage; and input and output mechanisms.
-The meaning has evolved to be **any stored-program computer in which an instruction fetch and a data operation cannot occur at the same time because they share a common bus**.
-This is referred to as the von Neumann bottleneck and often limits the performance of the system. (_Wikipedia_)
+>This describes a design architecture for an electronic digital computer with parts consisting of a processing unit containing an arithmetic logic unit and processor registers; a control unit containing an instruction register and program counter; a memory to store both data and instructions; external mass storage; and input and output mechanisms.
+>The meaning has evolved to be **any stored-program computer in which an instruction fetch and a data operation cannot occur at the same time because they share a common bus**.
+>This is referred to as the von Neumann bottleneck and often limits the performance of the system. (_Wikipedia_)
 
 From the descriptions in _Wikipedia_ we can get such points:
 
@@ -366,12 +366,12 @@ In an effort to solve this dilemma, computer science concentrates on **throughpu
 And some other advanced architectures based on this concept have been invented.
 
 >#### Pipelining
-In computing, a pipeline, also known as a data pipeline, is a set of data processing elements connected in series, where the output of one element is the input of the next one. The elements of a pipeline are often executed in
-parallel or in time-sliced fashion. Some amount of buffer storage is often inserted between elements. (Wikipedia)
+>In computing, a pipeline, also known as a data pipeline, is a set of data processing elements connected in series, where the output of one element is the input of the next one. The elements of a pipeline are often executed in
+>parallel or in time-sliced fashion. Some amount of buffer storage is often inserted between elements. (Wikipedia)
 
 >#### Multiprocessing
-Multiprocessing is the use of two or more central processing units (CPUs) within a single computer system.  
-![Multiprocessing](https://github.com/LouiValley/System-Design-in-Computational-Thinking-2018-Spring/raw/master/team2/final/pub_chapter05/Multiprocessing.png)
+>Multiprocessing is the use of two or more central processing units (CPUs) within a single computer system.  
+>![Multiprocessing](https://github.com/LouiValley/System-Design-in-Computational-Thinking-2018-Spring/raw/master/team2/final/pub_chapter05/Multiprocessing.png)
 
 In conclusion, all these architectures are different steps towards **parallel processing**, which is the performance of several activities at the same time. 
 ___
@@ -395,17 +395,17 @@ ___
 
 *Han Zhilei*
 
-​After building the entire functional Hack computer, this chapter advances towards the hardware-binded control method of the computer, which is called **assembly language**. It's our first stop in the journey through the *software layer*.
+After building the entire functional Hack computer, this chapter advances towards the hardware-binded control method of the computer, which is called **assembly language**. It's our first stop in the journey through the *software layer*.
 
 *NOTE* the order has been rearranged, and this chapter is corresponded with original chapter 4.
 
-![Logic Model](../assets/images/2018/logicmodel.png)
+![Logic Model](https://github.com/LouiValley/System-Design-in-Computational-Thinking-2018-Spring/raw/master/team2/final/pub_chapter04/logicmodel.png)
 
 ## Introduction
 
 Congratulations on your implementation of the Hack computer. It's fully functional, and also powerful. We originate from **Nand** gate only to build the whole computer and adopt Harvard architecture, which facilitate matters when we look into the underlying structure.Here's a graph to make your memory of **computer architecture** come back.[1] 
 
-![Harvard](../assets/images/2018/Harvard.png)
+![Harvard](https://github.com/LouiValley/System-Design-in-Computational-Thinking-2018-Spring/raw/master/team2/final/pub_chapter04/Harvard.png)
 
 We're now going to build our software layers and this chapter will discuss the language that directly generated by hardware implementation and design an assembly language. In the end, we shall be able to get the machine running as instructed.
 
@@ -421,7 +421,7 @@ What we use to encode our program is machine-binded string of 0s and 1s, compute
 
 In essence, what we are going to do in the following chapters is **all about solving problems by programming**. With our hardware architecture working perfectly, we have **potentially** a very powerful tool. To unlock this potential, we have to translate our human thoughts and concepts into a notation that is in conformation with the specifications of this architecture. **This** is what programming is ALL about. This process is better summarized in the graph bellow. [2]
 
-![process](../assets/images/2018/process.png)
+![process](https://github.com/LouiValley/System-Design-in-Computational-Thinking-2018-Spring/raw/master/team2/final/pub_chapter04/process.png)
 
 As you can see, machine language serves as the fundamental of the software layer as well as the interface for hardware. We can prove that anything a computer can do is able to be expressed by this language.When we are **programming**,the code produced all originate from machine language. What we will do is just facilitate the process of programming.
 
@@ -451,11 +451,11 @@ As mentioned before, from the input of CPU, we classify the instructions to two 
 
 A-instruction is used to change the content of A register, its syntax is:
 
-![ins](../assets/images/2018/AInstruction.png)
+![ins](https://github.com/LouiValley/System-Design-in-Computational-Thinking-2018-Spring/raw/master/team2/final/pub_chapter04/AInstruction.png)
 
 while C-instruction is used to carry out operation,jump through program and change the content of D and M register:
 
-![ins](../assets/images/2018/CInstruction.png)
+![ins](https://github.com/LouiValley/System-Design-in-Computational-Thinking-2018-Spring/raw/master/team2/final/pub_chapter04/CInstruction.png)
 
 These two kinds of instructions are all user-friendly notation for corresponding machine code,as shown above.For more information,just refer to the Nand2Tetris textbook where more details are discussed.
 
@@ -479,7 +479,7 @@ After fully learned the principles of assembly language,try to write programs to
 
 #### completenesss of *mov*,and the instruction set
 
-![mov](../assets/images/2018/mov.png)
+![mov](https://github.com/LouiValley/System-Design-in-Computational-Thinking-2018-Spring/raw/master/team2/final/pub_chapter04/mov.png)
 
 **In previous chapter**,we have stated that  **Nand is complete** and **Add is complete**,.etc. What about the language part? Is a single instruction able to represent all the others?
 
