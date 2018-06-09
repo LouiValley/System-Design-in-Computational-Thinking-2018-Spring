@@ -258,7 +258,7 @@ The project is not hard. Just go to proj_03 to do it. Focus on how to make choos
 
 
 
-## Addentional Points
+## Additional Points
 
 **Comparision: Different kinds of Memory**
 
