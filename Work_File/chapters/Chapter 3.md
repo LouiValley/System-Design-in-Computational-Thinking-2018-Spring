@@ -60,7 +60,7 @@ The project is not hard. Just go to proj_03 to do it. Focus on how to make choos
 
 
 
-## Addentional Points
+## Additional Points
 
 **Comparision: Different kinds of Memory**
 
@@ -87,4 +87,4 @@ Some questions can be as follows:
 
 ## Next chapter
 
-As we already have memory and ALU, the thrilling time is just in front of us. In the next chapter we will combine everything together to form a completed computer!  Σ(⊙▽⊙"a.
+As we already have memory and ALU, the thrilling time is just in front of us. In the next chapter we will combine everything together to form a completed computer!
