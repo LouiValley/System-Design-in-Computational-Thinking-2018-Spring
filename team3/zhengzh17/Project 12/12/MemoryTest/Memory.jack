@@ -1,0 +1,25 @@
+class Memory {
+	static Array pointer;
+    function void init() {
+      let pointer = 2048;
+      return;
+    }
+    function int peek(int address) {
+      var Array p;
+      let p = address;
+      return p[0];
+    }
+    function void poke(int address, int value) {
+      var Array p;
+      let p = address;
+      let p[0] = value;
+      return;
+    }
+    function int alloc(int size) {
+      let pointer = pointer + size;
+      return pointer - size;
+    }
+    function void deAlloc(Array o) {
+	  	return;
+    }    
+}
